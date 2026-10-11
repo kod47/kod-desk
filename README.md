@@ -33,7 +33,9 @@ with a crisp picture, low latency and no subscription.
 
 ## Download
 
-Get the latest installer from the [Releases](../../releases/latest) page: `KodDesk-<version>-x64.msi`.
+🌐 **Website:** [kod47.github.io/kod-desk](https://kod47.github.io/kod-desk/)
+
+Get the latest installer from the website or from the [Releases](../../releases/latest) page: `KodDesk-<version>-x64.msi`.
 
 **Requirements:** Windows 10 or 11 (64-bit). A graphics card with hardware video encoding is recommended
 (KodDesk falls back to software encoding otherwise).
