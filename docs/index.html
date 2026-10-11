@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KodDesk — Remote desktop for Windows</title>
+<meta name="description" content="Fast, sharp and private remote desktop for Windows: end-to-end encryption, full-color video, unattended access, file transfer and shared clipboard. Free.">
+<meta property="og:title" content="KodDesk — Remote desktop for Windows">
+<meta property="og:description" content="Fast, sharp and private remote desktop for Windows. Free.">
+<meta property="og:image" content="https://kod47.github.io/kod-desk/icon.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f8fb;
+    --surface: #ffffff;
+    --surface-2: #eef2ff;
+    --text: #0f172a;
+    --muted: #556070;
+    --border: #e3e7ef;
+    --accent: #2563eb;
+    --accent-2: #1d4ed8;
+    --amber: #f59e0b;
+    --shadow: 0 10px 30px rgba(15, 23, 42, .08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1020;
+      --surface: #121a2e;
+      --surface-2: #17223d;
+      --text: #e8ecf5;
+      --muted: #9aa6bc;
+      --border: #24304a;
+      --accent: #4f8cff;
+      --accent-2: #3b76f0;
+      --shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  header.top {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--text); }
+  .brand:hover { text-decoration: none; }
+  .brand img { width: 32px; height: 32px; }
+  nav a { color: var(--muted); margin-left: 24px; font-weight: 500; font-size: 15px; }
+  nav a:hover { color: var(--text); text-decoration: none; }
+
+  /* Hero */
+  .hero { padding: 72px 0 56px; text-align: center; }
+  .hero img.logo { width: 112px; height: 112px; filter: drop-shadow(0 12px 24px rgba(37, 99, 235, .35)); }
+  .hero h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.1; margin: 24px 0 16px; letter-spacing: -0.02em; font-weight: 800; }
+  .hero h1 span { color: var(--accent); }
+  .hero p.lead { font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); max-width: 640px; margin: 0 auto 32px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 16px;
+    border: 1px solid transparent; transition: transform .1s ease, background .15s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 8px 20px rgba(37, 99, 235, .3); }
+  .btn-primary:hover { background: var(--accent-2); }
+  .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .meta { margin-top: 14px; font-size: 14px; color: var(--muted); }
+
+  /* Sections */
+  section { padding: 56px 0; }
+  section h2 { font-size: clamp(26px, 4vw, 34px); margin: 0 0 10px; letter-spacing: -0.01em; text-align: center; }
+  section p.sub { text-align: center; color: var(--muted); margin: 0 auto 36px; max-width: 620px; }
+
+  /* Features */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; box-shadow: var(--shadow);
+  }
+  .card .ic {
+    width: 42px; height: 42px; border-radius: 10px; display: grid; place-items: center;
+    background: var(--surface-2); color: var(--accent); margin-bottom: 14px;
+  }
+  .card .ic svg { width: 22px; height: 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+  /* Picture comparison */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .shot { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: var(--shadow); }
+  .shot .label { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .06em; }
+  .shot.good .label { color: var(--accent); }
+  .screen { border-radius: 10px; overflow: hidden; background: #ffffff; color: #111827; font-size: 13px; }
+  .screen .bar { background: #1f2937; color: #e5e7eb; padding: 6px 10px; font-size: 12px; display: flex; gap: 6px; align-items: center; }
+  .screen .bar i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .screen .body { padding: 12px 14px; display: grid; gap: 8px; }
+  .screen .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .chip { padding: 2px 8px; border-radius: 6px; color: #fff; font-weight: 600; font-size: 12px; }
+  .code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 12.5px; }
+  .k { color: #0000ff; } .s { color: #a31515; } .c { color: #008000; } .t { color: #2b91af; }
+  .washed .screen { filter: contrast(.78) saturate(.8) brightness(1.06) blur(.45px); }
+  .caption { text-align: center; color: var(--muted); font-size: 14px; margin-top: 14px; }
+
+  /* Steps */
+  .steps { counter-reset: step; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .step { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; position: relative; }
+  .step::before {
+    counter-increment: step; content: counter(step);
+    width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--accent); color: #fff; font-weight: 700; margin-bottom: 12px;
+  }
+  .step h3 { margin: 0 0 6px; font-size: 16px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+  .note { text-align: center; color: var(--muted); font-size: 14px; margin-top: 18px; }
+
+  /* Security list */
+  .checks { list-style: none; padding: 0; margin: 0 auto; max-width: 720px; display: grid; gap: 12px; }
+  .checks li { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 14px 48px; position: relative; }
+  .checks li::before {
+    content: ""; position: absolute; left: 16px; top: 17px; width: 20px; height: 20px; border-radius: 50%;
+    background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/12px no-repeat;
+  }
+
+  /* Download / support */
+  .band {
+    background: linear-gradient(135deg, #2563eb, #1e40af); color: #fff; border-radius: 20px;
+    padding: 44px 28px; text-align: center; box-shadow: 0 20px 40px rgba(37, 99, 235, .3);
+  }
+  .band h2 { color: #fff; }
+  .band p { color: #dbe6ff; margin: 0 auto 24px; max-width: 560px; }
+  .band .btn-primary { background: #fff; color: #1e40af; box-shadow: none; }
+  .band .btn-primary:hover { background: #eef2ff; }
+  .band .meta { color: #c7d7ff; }
+  .support { text-align: center; }
+  .support .mail {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 6px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 18px; font-weight: 600;
+  }
+  .support .mail svg { width: 20px; height: 20px; color: var(--amber); }
+
+  footer { border-top: 1px solid var(--border); padding: 28px 0 40px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+  @media (max-width: 720px) {
+    nav a:not(.gh) { display: none; }
+    .compare { grid-template-columns: 1fr; }
+    .hero { padding: 48px 0 40px; }
+    .wrap { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="icon.png" alt="">KodDesk</a>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#start">Get started</a>
+      <a href="#security">Security</a>
+      <a class="gh" href="https://github.com/kod47/kod-desk">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <img class="logo" src="icon.png" alt="KodDesk">
+    <h1>Remote desktop that<br><span>looks sharp.</span></h1>
+    <p class="lead">See and control your Windows computers from anywhere — with a crisp picture, low latency,
+      end-to-end encryption and no subscription.</p>
+    <div class="cta">
+      <a class="btn btn-primary js-download" href="https://github.com/kod47/kod-desk/releases/latest">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        Download for Windows
+      </a>
+      <a class="btn btn-secondary" href="#features">Learn more</a>
+    </div>
+    <div class="meta js-meta">Free · Windows 10 / 11 (64-bit)</div>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>Everything you need, nothing you don't</h2>
+      <p class="sub">Built for everyday remote work and helping family and friends.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <h3>Crisp picture</h3>
+          <p>Full-color video (4:4:4 on NVIDIA GPUs) with correct colors — text looks like on the real screen, never washed out.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
+          <h3>Low latency</h3>
+          <p>Hardware video encoding on NVIDIA, Intel and AMD, and automatic adaptation to your connection.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+          <h3>Works anywhere</h3>
+          <p>No port forwarding, no router setup. Both computers just need an internet connection.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+          <h3>End-to-end encrypted</h3>
+          <p>Only the two computers can see the session — your screen, keystrokes and password stay private.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4"/><circle cx="12" cy="12" r="4"/></svg></div>
+          <h3>Unattended access</h3>
+          <p>Runs as a Windows service: reach your PC after a restart, at the sign-in screen and through UAC — with Ctrl+Alt+Del.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M12 12v6M9 15l3 3 3-3"/></svg></div>
+          <h3>File transfer</h3>
+          <p>Drag &amp; drop files onto the remote screen, or browse the remote computer's files and download with a click.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M16 5h2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2"/></svg></div>
+          <h3>Shared clipboard</h3>
+          <p>Copy text, images and even files on one computer and paste them on the other — Ctrl+C, Ctrl+V.</p>
+        </div>
+        <div class="card">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="9" height="7" rx="1"/><rect x="13" y="5" width="9" height="7" rx="1"/><path d="M6 16h12M9 19h6"/></svg></div>
+          <h3>Multi-monitor</h3>
+          <p>Switch between the remote computer's screens, view them fit-to-window or pixel-perfect 1:1.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="picture">
+    <div class="wrap">
+      <h2>No more washed-out screens</h2>
+      <p class="sub">Many remote desktop tools blur colored text and lose contrast. KodDesk keeps full color detail and the exact color range.</p>
+      <div class="compare">
+        <div class="shot washed">
+          <div class="label">Typical remote desktop</div>
+          <div class="screen" aria-hidden="true">
+            <div class="bar"><i style="background:#ef4444"></i><i style="background:#f59e0b"></i><i style="background:#22c55e"></i>&nbsp;Program.cs</div>
+            <div class="body">
+              <div class="code"><span class="c">// Send the latest frame</span></div>
+              <div class="code"><span class="k">var</span> frame = <span class="k">await</span> <span class="t">Capture</span>.NextAsync(<span class="s">"primary"</span>);</div>
+              <div class="row"><span class="chip" style="background:#dc2626">Error</span><span class="chip" style="background:#16a34a">Passed</span><span class="chip" style="background:#2563eb">Info</span><span class="chip" style="background:#9333ea">Draft</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="shot good">
+          <div class="label">KodDesk</div>
+          <div class="screen" aria-hidden="true">
+            <div class="bar"><i style="background:#ef4444"></i><i style="background:#f59e0b"></i><i style="background:#22c55e"></i>&nbsp;Program.cs</div>
+            <div class="body">
+              <div class="code"><span class="c">// Send the latest frame</span></div>
+              <div class="code"><span class="k">var</span> frame = <span class="k">await</span> <span class="t">Capture</span>.NextAsync(<span class="s">"primary"</span>);</div>
+              <div class="row"><span class="chip" style="background:#dc2626">Error</span><span class="chip" style="background:#16a34a">Passed</span><span class="chip" style="background:#2563eb">Info</span><span class="chip" style="background:#9333ea">Draft</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Illustration of the effect of reduced color detail and range (left) versus KodDesk (right).</p>
+    </div>
+  </section>
+
+  <section id="start">
+    <div class="wrap">
+      <h2>Get started in a minute</h2>
+      <p class="sub">Install on both computers, set a password, connect.</p>
+      <div class="steps">
+        <div class="step"><h3>Install</h3><p>Download the installer and run it on both computers.</p></div>
+        <div class="step"><h3>Set a password</h3><p>On the computer you want to reach, open KodDesk and set an access password.</p></div>
+        <div class="step"><h3>Note the ID</h3><p>Every computer gets a 9-digit ID, shown in the main window.</p></div>
+        <div class="step"><h3>Connect</h3><p>On the other computer, enter the ID and password — you're in.</p></div>
+      </div>
+      <p class="note">The app's interface is currently in Romanian.</p>
+    </div>
+  </section>
+
+  <section id="security">
+    <div class="wrap">
+      <h2>Private by design</h2>
+      <p class="sub">Your computer, your data.</p>
+      <ul class="checks">
+        <li>Every session is end-to-end encrypted and authenticated with the access password.</li>
+        <li>The password is never sent over the network and never stored in plain text.</li>
+        <li>Without the access password, nobody can connect to your computer.</li>
+        <li>On the controlled computer, files are accessed only with the permissions of the signed-in user.</li>
+        <li>Open source under the GPL-3.0 license — anyone can review the code.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="wrap">
+      <div class="band">
+        <h2>Download KodDesk</h2>
+        <p>Free for Windows 10 and 11 (64-bit). Installs in seconds and updates over previous versions, keeping your ID and password.</p>
+        <a class="btn btn-primary js-download" href="https://github.com/kod47/kod-desk/releases/latest">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Download for Windows
+        </a>
+        <div class="meta js-meta">Latest release on GitHub</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support" class="support">
+    <div class="wrap">
+      <h2>Support the project</h2>
+      <p class="sub">KodDesk is free. If you find it useful and would like to support its development, you can donate via PayPal:</p>
+      <span class="mail">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>
+        PayPal: kod447@gmail.com
+      </span>
+      <p class="note">Thank you!</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 KodDesk · Released under the <a href="https://github.com/kod47/kod-desk/blob/main/LICENSE">GPL-3.0</a> license</span>
+    <span><a href="https://github.com/kod47/kod-desk">Source code on GitHub</a></span>
+  </div>
+</footer>
+
+<script>
+  // Leagă butoanele de installer-ul din ultimul release (fallback: pagina release-urilor).
+  fetch("https://api.github.com/repos/kod47/kod-desk/releases/latest")
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(rel => {
+      const msi = (rel.assets || []).find(a => a.name.toLowerCase().endsWith(".msi"));
+      if (!msi) return;
+      const mb = (msi.size / 1024 / 1024).toFixed(0);
+      const date = new Date(rel.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+      document.querySelectorAll(".js-download").forEach(a => a.href = msi.browser_download_url);
+      document.querySelectorAll(".js-meta").forEach(m =>
+        m.textContent = `Version ${rel.tag_name.replace(/^v/, "")} · ${mb} MB · ${date} · Windows 10 / 11 (64-bit)`);
+    })
+    .catch(() => {});
+</script>
+</body>
+</html>

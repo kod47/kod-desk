@@ -5,7 +5,9 @@
 <h1 align="center">KodDesk</h1>
 
 <p align="center">
-  Fast, sharp and private remote desktop for Windows.
+  Fast, sharp and private remote desktop for Windows.<br>
+  <a href="https://kod47.github.io/kod-desk/"><b>Website</b></a> ·
+  <a href="../../releases/latest"><b>Download</b></a>
 </p>
 
 ---
@@ -73,6 +75,11 @@ dotnet build KodDesk.slnx
 
 KodDesk uses [FFmpeg](https://ffmpeg.org) for video encoding and decoding, and
 [Vortice.Windows](https://github.com/amerkoleci/Vortice.Windows) for screen capture.
+
+## Support the project
+
+KodDesk is free. If you find it useful and would like to support its development, you can make a donation
+via PayPal to **kod447@gmail.com**. Thank you!
 
 ## License
 
