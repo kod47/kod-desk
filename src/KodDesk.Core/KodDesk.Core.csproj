@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FFmpeg.AutoGen" Version="9.0.1.1" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.12" />
+    <PackageReference Include="Vortice.Direct3D11" Version="3.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KodDesk.Protocol\KodDesk.Protocol.csproj" />
+  </ItemGroup>
+
+  <!-- DLL-urile FFmpeg (descărcate cu tools/get-ffmpeg.ps1) se copiază în folderul ffmpeg de lângă exe.
+       Doar cele folosite: avcodec (depinde de avutil și swresample) și swscale. -->
+  <ItemGroup>
+    <None Include="..\..\third_party\ffmpeg\avcodec-*.dll;..\..\third_party\ffmpeg\avutil-*.dll;..\..\third_party\ffmpeg\swresample-*.dll;..\..\third_party\ffmpeg\swscale-*.dll" Link="ffmpeg\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+</Project>

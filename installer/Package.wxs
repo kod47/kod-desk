@@ -1,0 +1,85 @@
+<!--
+  Installer-ul KodDesk (MSI, per-machine, x64):
+    - aplicația în C:\Program Files\KodDesk, scurtătură în meniul Start
+    - serviciul Windows „KodDesk” (LocalSystem, pornire automată, repornire la eroare)
+    - politica SoftwareSASGeneration, ca serviciul să poată trimite Ctrl+Alt+Del
+  Setările din C:\ProgramData\KodDesk (ID, parolă) rămân la dezinstalare; serviciul le restricționează
+  la SYSTEM și Administratori la fiecare pornire.
+  Textele sunt fără diacritice: tabelele MSI folosesc o pagină de cod de 8 biți.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+
+  <Package Name="KodDesk"
+           Manufacturer="KodDesk"
+           Version="$(var.ProductVersion)"
+           UpgradeCode="6101C5A4-2E4B-48D3-9969-AE57BB542E6B"
+           Scope="perMachine"
+           Compressed="yes">
+
+    <MajorUpgrade DowngradeErrorMessage="O versiune mai noua de KodDesk este deja instalata." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Icon Id="KodDesk.ico" SourceFile="$(var.AssetsDir)\kod-desk.ico" />
+    <Property Id="ARPPRODUCTICON" Value="KodDesk.ico" />
+    <Property Id="ARPNOMODIFY" Value="1" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="KodDesk" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <Feature Id="Main" Title="KodDesk">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="SoftwareSasPolicy" />
+    </Feature>
+
+    <!-- Toate fișierele publicate (runtime .NET, FFmpeg etc.), mai puțin executabilul principal. -->
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Files Include="$(var.AppPublishDir)\**">
+        <Exclude Files="$(var.AppPublishDir)\KodDesk.exe" />
+      </Files>
+    </ComponentGroup>
+
+    <Component Id="MainExecutable" Directory="INSTALLFOLDER">
+      <File Id="KodDeskExe" Source="$(var.AppPublishDir)\KodDesk.exe" KeyPath="yes">
+        <Shortcut Id="StartMenuShortcut"
+                  Directory="ProgramMenuFolder"
+                  Name="KodDesk"
+                  Description="KodDesk - acces la distanta"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="KodDesk.ico"
+                  Advertise="yes" />
+      </File>
+
+      <ServiceInstall Id="KodDeskService"
+                      Name="KodDesk"
+                      DisplayName="KodDesk"
+                      Description="KodDesk - acces la distanta (porneste automat cu Windows)."
+                      Type="ownProcess"
+                      Start="auto"
+                      Account="LocalSystem"
+                      ErrorControl="normal"
+                      Arguments="--service"
+                      Vital="yes">
+        <util:ServiceConfig FirstFailureActionType="restart"
+                            SecondFailureActionType="restart"
+                            ThirdFailureActionType="restart"
+                            RestartServiceDelayInSeconds="5"
+                            ResetPeriodInDays="1" />
+      </ServiceInstall>
+      <ServiceControl Id="KodDeskServiceControl" Name="KodDesk" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+    </Component>
+
+    <!-- Permite serviciilor să simuleze Ctrl+Alt+Del (SendSAS). -->
+    <Component Id="SoftwareSasPolicy" Directory="INSTALLFOLDER">
+      <RegistryValue Root="HKLM"
+                     Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+                     Name="SoftwareSASGeneration"
+                     Type="integer"
+                     Value="1"
+                     KeyPath="yes" />
+    </Component>
+  </Package>
+</Wix>

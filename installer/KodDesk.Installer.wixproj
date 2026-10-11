@@ -1,0 +1,15 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+
+  <!-- Se construiește cu tools/build-installer.ps1 (publică aplicația, apoi generează MSI-ul). -->
+  <PropertyGroup>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <OutputName>KodDesk-$(Version)-x64</OutputName>
+    <AppPublishDir Condition="'$(AppPublishDir)' == ''">$(MSBuildThisFileDirectory)..\publish\app</AppPublishDir>
+    <DefineConstants>ProductVersion=$(Version);AppPublishDir=$(AppPublishDir);AssetsDir=$(MSBuildThisFileDirectory)..\src\KodDesk.App\Assets</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Util.wixext" Version="5.0.2" />
+  </ItemGroup>
+
+</Project>

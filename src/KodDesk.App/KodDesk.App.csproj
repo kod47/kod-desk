@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>KodDesk</AssemblyName>
+    <RootNamespace>KodDesk.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Program.Main alege rolul (aplicație, serviciu, agent, instalare) în funcție de argumente. -->
+    <StartupObject>KodDesk.App.Program</StartupObject>
+    <ApplicationIcon>Assets\kod-desk.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\kod-desk.ico" />
+  </ItemGroup>
+
+  <!-- Licența și notificările pentru componentele terțe se distribuie împreună cu aplicația. -->
+  <ItemGroup>
+    <None Include="..\..\LICENSE;..\..\THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KodDesk.Core\KodDesk.Core.csproj" />
+  </ItemGroup>
+
+</Project>

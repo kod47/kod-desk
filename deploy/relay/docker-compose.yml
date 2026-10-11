@@ -1,0 +1,29 @@
+services:
+  kod-desk-relay:
+    build:
+      context: ../..
+      dockerfile: deploy/relay/Dockerfile
+    image: kod-desk-relay:latest
+    container_name: kod-desk-relay
+    restart: unless-stopped
+    ports:
+      # Accesibil în rețeaua locală (test) și pentru cloudflared instalat direct pe server.
+      - "21120:21120"
+    environment:
+      # Cheia comună pe care trebuie s-o cunoască aplicațiile ca să folosească relay-ul.
+      # Se setează în fișierul .env de lângă acest docker-compose.yml.
+      - RELAY_KEY=${RELAY_KEY:?Setează RELAY_KEY în .env}
+      # Limite (0 = fără limită); se pot schimba din .env.
+      - LIMIT_CONNECTS_PER_MINUTE=${LIMIT_CONNECTS_PER_MINUTE:-60}
+      - LIMIT_HOSTS_PER_IP=${LIMIT_HOSTS_PER_IP:-10}
+      - LIMIT_NEW_IDS_PER_DAY=${LIMIT_NEW_IDS_PER_DAY:-10}
+      - LIMIT_MAX_IDS=${LIMIT_MAX_IDS:-5000}
+      - LIMIT_SESSIONS_PER_IP=${LIMIT_SESSIONS_PER_IP:-4}
+      - LIMIT_SESSIONS_TOTAL=${LIMIT_SESSIONS_TOTAL:-20}
+      - LIMIT_SESSION_HOURS=${LIMIT_SESSION_HOURS:-12}
+      - LIMIT_SESSION_MBPS=${LIMIT_SESSION_MBPS:-60}
+    volumes:
+      - relay-data:/data
+
+volumes:
+  relay-data:

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/KodDesk.App/KodDesk.App.csproj" />
+    <Project Path="src/KodDesk.Core/KodDesk.Core.csproj" />
+    <Project Path="src/KodDesk.Protocol/KodDesk.Protocol.csproj" />
+    <Project Path="src/KodDesk.Relay/KodDesk.Relay.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/KodDesk.SelfTest/KodDesk.SelfTest.csproj" />
+  </Folder>
+</Solution>

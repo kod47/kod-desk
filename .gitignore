@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+*.user
+publish/
+third_party/ffmpeg/
+relay-data/
+
+# Relay-ul încorporat (adresă + cheie), generat de tools/set-relay.ps1
+**/RelayConfig.Local.cs
